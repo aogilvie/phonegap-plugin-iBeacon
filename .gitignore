@@ -1,0 +1,16 @@
+OS X
+*.DS_Store
+
+# Xcode
+*.xcworkspace
+xcuserdata
+
+# Android
+.idea/
+bin/
+gen/
+*.iml
+*.iws
+out/
+local.properties
+log/

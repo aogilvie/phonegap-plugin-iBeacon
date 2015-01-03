@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<!--
+    Licensed to the Apache Software Foundation (ASF) under one
+    or more contributor license agreements.  See the NOTICE file
+    distributed with this work for additional information
+    regarding copyright ownership.  The ASF licenses this file
+    to you under the Apache License, Version 2.0 (the
+    "License"); you may not use this file except in compliance
+    with the License.  You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+    Unless required by applicable law or agreed to in writing,
+    software distributed under the License is distributed on an
+    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+     KIND, either express or implied.  See the License for the
+    specific language governing permissions and limitations
+    under the License.
+-->
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <meta name="format-detection" content="telephone=no" />
+        <meta name="msapplication-tap-highlight" content="no" />
+        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
+        <link rel="stylesheet" type="text/css" href="css/index.css" />
+        <title>Hello World</title>
+        <style type="text/css">
+            #container {
+                width: 320px;
+                margin: 0 auto;
+            }
+            section {
+                margin-bottom: 20px;
+            }
+            section.dialog {
+                border: 1px solid #999;
+                background: #fff;
+                padding: 12px;
+                margin: 0;
+                position: relative;
+            }
+            section.dialog h1 {
+                display: block;
+                margin: -12px -12px 12px -12px;
+                padding: 10px 4px;
+                background: #eee;
+                text-align: center;
+                font-size: 13px;
+                font-weight: normal;
+                color: #000;
+            }
+            section.dialog section {
+                padding: 20px;
+                margin: 20px -12px;
+                border-top: 1px solid #999;
+                border-bottom: 1px solid #999;
+                border-left: 10px solid #999;
+                border-right: 10px solid #999;
+            }
+            section.dialog section h1 {
+                text-align: center;
+                padding: 0;
+                background: none;
+                color: #42679C;
+                font-size: 13px;
+                margin: 0 0 10px 0;
+            }
+            button {
+                border: 1px solid #cfcfcf;
+                background: #eee;
+                display: inline-block;
+                line-height: 22px;
+                padding: 5px 20px;
+                color: #333;
+                font-size: large;
+            }
+            button:disabled {
+                opacity: 0.5;
+            }
+            button:not(:disabled):hover {
+                background: #fff;
+                color: #ef4327;
+            }
+            button.small {
+                color: #43679B;
+                font-weight: bold;
+                background: none;
+                line-height: inherit;
+                padding: 2px 5px;
+            }
+        </style>
+        <script type="text/javascript">
+        function startMonitoringBeaconsInRegion() {
+            iBeacon.startMonitoringBeaconsInRegion();
+        }
+        function startRangingBeaconsInRegion() {
+            iBeacon.startRangingBeaconsInRegion();
+        }
+
+        function updateRangingTable(event) {
+            var tableRow = document.getElementById("beacon_row");
+            if (event.unknown.length > 0) {
+
+            }
+            if (event.immediate.length > 0) {
+                console.log("Beacon: " + event.immediate[0].uuid + " - " + event.immediate[0].accuracy)
+            }
+            if (event.near.length > 0) {
+
+            }
+            if (event.far.length > 0) {
+
+            }
+            /*
+            tableRow.innerHTML = "<th></th> \
+                                <td>" + "-" + "</td> \
+                                <td>" + "-" + "</td> \
+                                <td>" + "-" + "</td> \
+                                <td>" + "-" + "</td> \
+                                <td>" + "Connected" + "</td>";
+                                */
+        }
+        // Events
+        document.addEventListener('iBeaconRanging', updateRangingTable, false);
+
+        </script>
+    </head>
+    <body>
+        <div id="container">
+            <h1>iBeacon Plugin</h1>
+            <section class="dialog">
+                <p>Experiment by pressing the buttons.</p>
+                <button onclick="startRangingBeaconsInRegion();">Start Ranging</button>
+                <p>Send a message to our new view from this webview...</p>
+                <button onclick="startMonitoringBeaconsInRegion();">Start Monitoring</button>
+                <p>Send a message to our new view from this webview...</p>
+                <table>
+                    <caption>Ranging Beacons</caption>
+                    <tr>
+                        <th>Beacons</th>
+                    </tr>
+                    <tr id="beacon_row">
+                        <th></th>
+                        <td>Unknown</td>
+                        <td>Immediate</td>
+                        <td>Near</td>
+                        <td>Far</td>
+                    </tr>
+                </table>
+            </section>
+        </div>
+
+        <script type="text/javascript" src="cordova.js"></script>
+    </body>
+</html>

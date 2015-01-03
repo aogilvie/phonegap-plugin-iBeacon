@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+    <plugin xmlns="http://www.phonegap.com/ns/plugins/1.0"
+        id="com.github.aogilvie.phonegap.plugins.iBeacon"
+        version="0.1.0">
+    <name>iBeacon Plugin</name>
+    <description>
+        Simple iBeacon plugin
+    </description>
+    <license>MIT</license>
+    <keywords>phonegap,ios,android,ibeacon</keywords>
+    <js-module src="www/phonegap/plugin/iBeacon/iBeacon.js" name="iBeacon">
+        <clobbers target="window.iBeacon" />
+    </js-module>
+    <!-- ios -->
+    <platform name="ios">
+        <config-file target="config.xml" parent="/*">
+            <feature name="iBeacon">
+                <param name="ios-package" value="iBeacon"/>
+                <param name="onload" value="true"/>
+            </feature>
+        </config-file>
+
+        <header-file src="platforms/ios/HelloCordova/Plugins/iBeacon.h" />
+        <source-file src="platforms/ios/HelloCordova/Plugins/iBeacon.m" />
+        <header-file src="platforms/ios/HelloCordova/Plugins/iBeaconDefaults.h" />
+        <source-file src="platforms/ios/HelloCordova/Plugins/iBeaconDefaults.m" />
+
+        <!-- Frameworks -->
+        <framework src="CoreBluetooth.framework" />
+        <framework src="CoreLocation.framework" />
+    </platform>
+</plugin>
