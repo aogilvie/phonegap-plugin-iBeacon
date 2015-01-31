@@ -105,13 +105,13 @@
 
             }
             if (event.immediate.length > 0) {
-                console.log("Beacon: " + event.immediate[0].uuid + " - " + event.immediate[0].accuracy)
+                console.log("Immediate beacon: " + event.immediate[0].uuid + " - " + event.immediate[0].accuracy);
             }
             if (event.near.length > 0) {
-
+                console.log("Near beacon: " + event.near[0].uuid + " - " + event.near[0].accuracy);
             }
             if (event.far.length > 0) {
-
+                console.log("Far beacon: " + event.far[0].uuid + " - " + event.far[0].accuracy);
             }
             /*
             tableRow.innerHTML = "<th></th> \
@@ -123,6 +123,12 @@
                                 */
         }
         // Events
+        document.addEventListener('deviceready', function () {
+            // Add out devices
+            iBeacon.addBeacons([
+                    { uuid: "E2C56DB5-DFFB-48D2-B060-D0F5A71096E0" }, { uuid: "B9407F30-F5F8-466E-AFF9-25556B57FE6D" }, { uuid: "74278BDA-B644-4520-8F0C-720EAF059935" }
+                ]);
+            }, false);
         document.addEventListener('iBeaconRanging', updateRangingTable, false);
 
         </script>

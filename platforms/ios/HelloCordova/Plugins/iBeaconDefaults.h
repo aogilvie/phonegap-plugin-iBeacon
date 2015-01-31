@@ -100,9 +100,12 @@
 
 + (iBeaconDefaults *)sharedDefaults;
 
-@property (nonatomic, copy, readonly) NSArray *supportedProximityUUIDs;
+@property (nonatomic, copy, readonly) NSMutableArray *supportedProximityUUIDs;
 
 @property (nonatomic, copy, readonly) NSUUID *defaultProximityUUID;
 @property (nonatomic, copy, readonly) NSNumber *defaultPower;
+
+- (void)addProximityUUID:(NSString *)uuid;
+- (void)removeProximityUUID:(NSString *)uuid;
 
 @end

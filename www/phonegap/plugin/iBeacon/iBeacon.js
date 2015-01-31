@@ -1,4 +1,3 @@
-cordova.define("com.github.aogilvie.phonegap.plugin.iBeacon", function(require, exports, module) {
     /**
      * 
      * @author Ally Ogilvie
@@ -45,4 +44,3 @@ cordova.define("com.github.aogilvie.phonegap.plugin.iBeacon", function(require, 
     window.iBeacon = new IBeacon();
     console.log("iBeacon Plugin JS API loaded");
     module.exports = iBeacon;
-});

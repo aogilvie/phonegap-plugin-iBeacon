@@ -184,7 +184,7 @@
     NSLog(@"description %@", error.description);
     NSLog(@"code %ld", (long)error.code);
     // You can get an error if more than 20 regions! (MAX is 20)
-    NSLog(@"regions: %i", _locationManager.monitoredRegions.count);
+    NSLog(@"regions: %lu", (unsigned long)_locationManager.monitoredRegions.count);
     
     NSLog(@"monitoringDidFailForRegion %@ %@", region, error.localizedDescription);
     
@@ -213,7 +213,7 @@
     NSArray *unknownBeacons = [beacons filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"proximity = %d", CLProximityUnknown]];
     if ([unknownBeacons count])
         [_beacons setObject:unknownBeacons forKey:[NSNumber numberWithInt:CLProximityUnknown]];
-    
+
     NSArray *immediateBeacons = [beacons filteredArrayUsingPredicate:[NSPredicate predicateWithFormat:@"proximity = %d", CLProximityImmediate]];
     if ([immediateBeacons count])
         [_beacons setObject:immediateBeacons forKey:[NSNumber numberWithInt:CLProximityImmediate]];
@@ -342,6 +342,45 @@
     
     CDVPluginResult *pluginResult = [CDVPluginResult resultWithStatus:CDVCommandStatus_OK];
     [self.commandDelegate sendPluginResult:pluginResult callbackId:command.callbackId];
+}
+
+- (void)addBeacons:(CDVInvokedUrlCommand *)command {
+    NSArray *beacons = [command.arguments objectAtIndex:0];
+    if (beacons.count > 0) {
+        int i;
+        for (i = 0; i < beacons.count; i++) {
+            NSDictionary *beacon = (NSDictionary *)[beacons objectAtIndex:i];
+            [[iBeaconDefaults sharedDefaults] addProximityUUID:[beacon objectForKey:@"uuid"]];
+
+        }
+        // Clear rangedRegion, we'll re-populate it
+        [_rangedRegions removeAllObjects];
+        // Iterate and add new beacons to rangedRegions
+        [[iBeaconDefaults sharedDefaults].supportedProximityUUIDs enumerateObjectsUsingBlock:^(id uuidObj, NSUInteger uuidIdx, BOOL *uuidStop) {
+            NSUUID *uuid = (NSUUID *)uuidObj;
+            CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid identifier:[uuid UUIDString]];
+            [_rangedRegions addObject:region];
+        }];
+    }
+}
+
+- (void)removeBeacons:(CDVInvokedUrlCommand *)command {
+    NSArray *beacons = [command.arguments objectAtIndex:0];
+    if (beacons.count > 0) {
+        int i;
+        for (i = 0; i < beacons.count; i++) {
+            NSDictionary *beacon = (NSDictionary *)[beacons objectAtIndex:i];
+            [[iBeaconDefaults sharedDefaults] removeProximityUUID:[beacon objectForKey:@"uuid"]];
+        }
+        // Clear rangedRegion, we'll re-populate it
+        [_rangedRegions removeAllObjects];
+        // Iterate and add new beacons to rangedRegions
+        [[iBeaconDefaults sharedDefaults].supportedProximityUUIDs enumerateObjectsUsingBlock:^(id uuidObj, NSUInteger uuidIdx, BOOL *uuidStop) {
+            NSUUID *uuid = (NSUUID *)uuidObj;
+            CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:uuid identifier:[uuid UUIDString]];
+            [_rangedRegions addObject:region];
+        }];
+    }
 }
 
 - (void)getAuthorizationStatus:(CDVInvokedUrlCommand *)command {
