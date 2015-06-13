@@ -98,7 +98,7 @@
     CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:[NSUUID UUID] identifier:@"com.apple.AirLocate"];
     region = [_locationManager.monitoredRegions member:region];
     if (region) {
-        _enabled = YES;
+        _enabled = TRUE;
         _uuid = region.proximityUUID;
         _major = region.major;
         _minor = region.minor;
@@ -107,7 +107,7 @@
         _notifyOnDisplay = region.notifyEntryStateOnDisplay;
     } else {
         // Default settings.
-        _enabled = NO;
+        _enabled = FALSE;
         _uuid = [iBeaconDefaults sharedDefaults].defaultProximityUUID;
         _major = _minor = nil;
         _notifyOnEntry = _notifyOnExit = YES;
@@ -152,19 +152,22 @@
     // A user can transition in or out of a region while the application is not running.
     // When this happens CoreLocation will launch the application momentarily, call this delegate method
     // and we will let the user know via a local notification.
-    UILocalNotification *notification = [[UILocalNotification alloc] init];
+    // UILocalNotification *notification = [[UILocalNotification alloc] init];
 
     if (state == CLRegionStateInside) {
-        notification.alertBody = @"You're inside the region";
+        // notification.alertBody = @"You're inside the region";
+        NSLog(@"inside");
+        [_locationManager startRangingBeaconsInRegion:region];
     } else if (state == CLRegionStateOutside) {
-        notification.alertBody = @"You're outside the region";
+        NSLog(@"outside");
+        // notification.alertBody = @"You're outside the region";
     } else {
         return;
     }
 
     // If the application is in the foreground, it will get a callback to application:didReceiveLocalNotification:.
     // If its not, iOS will display the notification to the user.
-    [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
+    // [[UIApplication sharedApplication] presentLocalNotificationNow:notification];
 }
 
 - (void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region {
@@ -176,7 +179,7 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region {
-    
+    [_locationManager requestStateForRegion:region];
 }
 
 - (void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error {
@@ -291,9 +294,15 @@
 
 # pragma mark Javascript Plugin API
 
-- (void)startMonitoringForRegion:(CDVInvokedUrlCommand *)command {
+- (void)startMonitoringBeaconsInRegion:(CDVInvokedUrlCommand *)command {
     
-    if (_enabled) {
+    // if (_enabled) {
+        NSUUID *proximityUUID = [[NSUUID alloc] initWithUUIDString:@"4AC9B27B-2CDE-C989-1B36-663865BD438C"];
+        CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:proximityUUID identifier:@"Estimote Region"];
+        [_locationManager startMonitoringForRegion:region];
+        
+        /*
+         
         CLBeaconRegion *region = nil;
         if (_uuid && _major && _minor) {
             region = [[CLBeaconRegion alloc] initWithProximityUUID:_uuid major:[_major shortValue] minor:[_minor shortValue] identifier:@"com.apple.AirLocate"];
@@ -304,20 +313,18 @@
         }
         
         if (region) {
-            region.notifyOnEntry = _notifyOnEntry;
-            region.notifyOnExit = _notifyOnExit;
-            region.notifyEntryStateOnDisplay = _notifyOnDisplay;
+            //region.notifyOnEntry = _notifyOnEntry;
+            //region.notifyOnExit = _notifyOnExit;
+            //region.notifyEntryStateOnDisplay = _notifyOnDisplay;
             
-            [_locationManager startMonitoringForRegion:region];
         }
+         */
+    /*
     } else {
         CLBeaconRegion *region = [[CLBeaconRegion alloc] initWithProximityUUID:[NSUUID UUID] identifier:@"com.apple.AirLocate"];
         [_locationManager stopMonitoringForRegion:region];
     }
-}
-
-- (void)stopMonitoringForRegion:(CDVInvokedUrlCommand *)command {
-// TODO
+     */
 }
 
 - (void)startRangingBeaconsInRegion:(CDVInvokedUrlCommand *)command {
